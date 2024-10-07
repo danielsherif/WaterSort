@@ -1,11 +1,12 @@
 package code;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+import java.util.HashSet;
+import java.util.List;
 
 public abstract class GenericSearch {
 
@@ -44,9 +45,14 @@ public abstract class GenericSearch {
 
         int nodesExpanded = 0; // Keep track of the number of nodes expanded
 
+        // Main loop: Expand nodes until we either find a goal or exhaust the frontier
         while (!NodeStructure.isEmpty()) {
             Node node;
-            if (NodeStructure instanceof Queue) {
+
+            // Check if the NodeStructure is a PriorityQueue for UCS, else handle Queue or Stack
+            if (NodeStructure instanceof PriorityQueue) {
+                node = ((PriorityQueue<Node>) NodeStructure).poll(); // Extract the node with the least cost
+            } else if (NodeStructure instanceof Queue) {
                 node = ((Queue<Node>) NodeStructure).poll();
             } else if (NodeStructure instanceof Stack) {
                 node = ((Stack<Node>) NodeStructure).pop();
@@ -72,20 +78,17 @@ public abstract class GenericSearch {
             // For each valid action, get the resulting state and add a new node to the frontier
             for (String action : actions) {
                 State newState = getResult(node.state, action);
-                
+
                 // Check if the new state is not null and not visited
                 if (newState != null && !visitedStates.contains(newState)) {
                     // Add new state to visitedStates
                     visitedStates.add(newState);
-                    
-                    // Check if newState is different from current state
-                    if (!newState.equals(node.state)) {
-                        // You can perform any specific actions here if needed
-                        System.out.println("New action added: " + action);
-                    }
-                    
+
+                    // Accumulate cost (if UCS, we are prioritizing based on cost)
+                    int newCost = node.cost + 1; // Assuming all actions have a uniform cost of 1
+
                     // Add the new state, along with the parent node and action taken, to the frontier
-                    NodeStructure.add(new Node(newState, node, action, newcost));
+                    NodeStructure.add(new Node(newState, node, action, newCost)); // Add to PQ or Queue/Stack
                 } else {
                     System.out.println("Discarding invalid pour action: " + action);
                 }
@@ -96,4 +99,6 @@ public abstract class GenericSearch {
         System.out.println("No solution found. Nodes expanded: " + nodesExpanded);
         return new SearchResult(null, nodesExpanded); // Return no solution, with the total nodes expanded
     }
+
+
 }

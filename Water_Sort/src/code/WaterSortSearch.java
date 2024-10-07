@@ -118,7 +118,13 @@ public class WaterSortSearch extends GenericSearch {
         } else if (strategy.equals("DF")) {
             SearchResult searchResult = new DFS(initialState1).dfs();
             searchProblem.setSearchResult(searchResult);
+        } else if (strategy.equals("UC")) {
+            SearchResult searchResult = new UCS(initialState1).ucs();
+            searchProblem.setSearchResult(searchResult);
+        } else {
+            throw new IllegalArgumentException("Unsupported search strategy: " + strategy);
         }
+
 
         if (searchProblem.getSolutionNode() == null) {
             return "NOSOLUTION";
