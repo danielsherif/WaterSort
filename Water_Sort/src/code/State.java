@@ -170,6 +170,12 @@ public class State {
         // Return new state with updated bottles
         return new State(newBottles, capacity);
     }
-
+    public String visualize() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < bottles.length; i++) {
+            sb.append("Bottle ").append(i).append(": ").append(bottles[i]).append("\n");
+        }
+        return sb.toString();
+    }
 
 }
