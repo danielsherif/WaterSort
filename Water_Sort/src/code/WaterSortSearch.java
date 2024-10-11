@@ -51,18 +51,21 @@ public class WaterSortSearch extends GenericSearch {
         }
         
         // Just for testing
-        System.out.println("Available actions from state: " + state);
+        System.out.println("Available actions from state: ");
+        System.out.println(state.visualize());
         return actions;
     }
 
     @Override
     protected State getResult(State state, String action) {
         String[] parts = action.replace("pour(", "").replace(")", "").split(",");
+        System.out.println("Pouring " + action.replace("pour(", "").replace(")", ""));
         int m = Integer.parseInt(parts[0]);
         int n = Integer.parseInt(parts[1]);
 
         // Use the pour method from the State class
         State newState = state.pour(m, n);
+
 
         // Check if the new state is valid (not null)
         if (newState == null) {
@@ -118,7 +121,13 @@ public class WaterSortSearch extends GenericSearch {
         } else if (strategy.equals("DF")) {
             SearchResult searchResult = new DFS(initialState1).dfs();
             searchProblem.setSearchResult(searchResult);
+        } else if (strategy.equals("UC")) {
+            SearchResult searchResult = new UCS(initialState1).ucs();
+            searchProblem.setSearchResult(searchResult);
+        } else {
+            throw new IllegalArgumentException("Unsupported search strategy: " + strategy);
         }
+
 
         if (searchProblem.getSolutionNode() == null) {
             return "NOSOLUTION";
@@ -132,7 +141,7 @@ public class WaterSortSearch extends GenericSearch {
         Node currentNode = solutionNode;
 
         while (currentNode.parent != null) {
-        	
+
             // the string that is required in the description
             String formattedAction = currentNode.action.replace("(", "_").replace(",", "_").replace(")", "");
             plan.add(0, formattedAction); // Add to the front of the list to maintain order
@@ -143,7 +152,9 @@ public class WaterSortSearch extends GenericSearch {
         if (visualize) {
             currentNode = solutionNode;
             while (currentNode != null) {
-                System.out.println(currentNode.state);
+                System.out.println("====================================="); // Add a separator
+                System.out.println(currentNode.state.visualize()); // Visualize the state
+                System.out.println("====================================="); // Add a separator
                 currentNode = currentNode.parent;
             }
         }

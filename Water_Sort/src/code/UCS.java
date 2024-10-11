@@ -1,15 +1,17 @@
 package code;
-/*
+
 import java.util.PriorityQueue;
 
 public class UCS extends WaterSortSearch {
     public UCS(State initialState) {
-        super(initialState); // Call the constructor of the superclass
+        super(initialState);
     }
 
     public SearchResult ucs() {
-        PriorityQueue<Node> frontier = new PriorityQueue<>((a, b) -> Integer.compare(a.cost, b.cost));
-        return search(frontier); // Calls the search method with a priority queue
+        // Initialize the NodeStructure as a PriorityQueue
+        PriorityQueue<Node> NodeStructure = new PriorityQueue<>((n1, n2) -> Integer.compare(n1.cost, n2.cost));
+
+        // Call the search method with the PriorityQueue
+        return search(initialState, NodeStructure);
     }
 }
-*/

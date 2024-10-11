@@ -2,6 +2,7 @@ package code;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 public class BFS extends WaterSortSearch {
     public BFS(State initialState) {
